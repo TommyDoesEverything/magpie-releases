@@ -10,43 +10,53 @@ itself up to date. Development happens in a separate, private repo.
 
 ## Installing
 
-1. Install [Python 3](https://www.python.org/downloads/), and **tick "Add
-   python.exe to PATH"** during setup. This is the only prerequisite.
-2. From the [latest release](../../releases/latest), download **`magpie.py`**
-   and **`Magpie.bat`** into a folder of your own — somewhere you'll find
-   again, like `Documents\Magpie`.
-3. Double-click **`Magpie.bat`**.
+1. Download **`Magpie.exe`** from the [latest release](../../releases/latest).
+2. Put it in a folder of its own — `Documents\Magpie` is fine. Magpie writes
+   its settings and downloaded tools next to itself, so it needs somewhere it
+   can write. **Not** `Program Files`.
+3. Double-click it.
 
-On first run Magpie offers to fetch `yt-dlp.exe` for itself. To merge video
-with audio, convert audio, or convert footage for editing, you'll also want
-[ffmpeg](https://www.gyan.dev/ffmpeg/builds/) on your PATH.
+There is nothing to install. Python, the image backends, and everything else
+Magpie needs are inside the exe.
+
+Windows will say **"Windows protected your PC"** the first time, because the
+exe isn't signed by a paid-for certificate. Click **More info → Run anyway**.
+This only happens on that first download — when Magpie updates itself, the new
+copy doesn't carry the download marker that triggers the warning.
+
+On first run Magpie offers to fetch `yt-dlp.exe`, and offers `ffmpeg` the
+first time something needs it (about 73 MB — it's what joins the best video to
+the best audio).
 
 ## Updating
 
-Magpie updates itself. It looks for a new version when it starts and shows a
-quiet *"a new version is available"* button when it finds one. Nothing
-installs without you clicking it, and nothing ever interrupts a download in
-progress.
+Magpie updates itself. It looks for a new version at startup and shows a quiet
+*"a new version is available"* button when it finds one. Nothing installs
+without you clicking it, and nothing ever interrupts a download in progress.
 
-**Advanced → Updates** has the controls:
-
-- **Look for a new version at startup** — turn it off and Magpie never phones
-  home.
-- **Versions…** — every release ever published, with dates and what changed.
-  Install any of them, including going back to an older one if something new
-  misbehaves.
+**Help → Versions and Release Notes…** lists every release, with dates and
+what changed. Install any of them, including going back if something new
+misbehaves. **Help → Check for Updates at Startup** turns the check off
+entirely.
 
 Your settings, cookies, and downloaded files are never touched by an update.
-The version being replaced is kept next to the app as `magpie.prev.py`; if a
-release ever arrives broken, delete `magpie.py` and rename that file back.
+The version being replaced is kept beside the app as `Magpie.prev.exe`; if a
+release ever arrives broken, delete `Magpie.exe` and rename that file back.
 
-## What's in a release
+## Two shapes of release
 
-| File | What it is |
-| --- | --- |
-| `magpie.py` | the app itself — this is the file that updates |
-| `Magpie.bat` | the double-click launcher; you only need it the first time |
-| `manifest.json` | the version list Magpie reads when it checks for updates |
+Releases **1.0.0 to 1.3.0** are a loose `magpie.py` script that needs Python
+installed. **2.0.0 onwards** are the packaged `Magpie.exe`, which needs
+nothing.
+
+Magpie only offers versions matching the copy you're running — an exe can't
+swap itself for a script, or the other way round. Moving between them means
+downloading once by hand.
+
+> **Avoid 2.0.0.** It shipped with a size limit left over from the script
+> releases, so it refuses every exe update including its own replacement.
+> [2.0.1](../../releases/latest) fixes it. If you already have 2.0.0, download
+> 2.0.1 by hand — 2.0.0 can't fetch it for you.
 
 ## Version numbers
 
