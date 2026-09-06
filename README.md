@@ -1,12 +1,25 @@
 # Magpie — releases
 
-Magpie is a small Windows app for saving video, audio, and images from the web.
-It works out where a link should go — yt-dlp for video and audio, gallery-dl
-for image galleries, instaloader for Instagram archives — and wraps all three
-in one window.
+Magpie is a small Windows app for getting media off the web and into the shape
+you need it in. Four tabs, named after what you actually came to do:
+
+| Tab | What it is for |
+| --- | --- |
+| **Download** | Paste links. Magpie works out where each one should go — yt-dlp for video and audio, gallery-dl for image galleries, instaloader for Instagram archives — and drives all three from one window |
+| **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants |
+| **Resize** | Change the dimensions of video or pictures |
+| **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and look as good as possible doing it |
+
+The last three work on files from anywhere, not only on things Magpie
+downloaded. Drag them onto the window and they land on the tab you dropped
+them on.
 
 This repo carries the published versions and the manifest Magpie reads to keep
 itself up to date. Development happens in a separate, private repo.
+
+**[What Magpie doesn't do yet, and why it might](docs/roadmap.md)** — the
+list of problems worth solving, with the reasoning kept where it can be
+argued with rather than remembered badly.
 
 ## Installing
 
