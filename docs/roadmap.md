@@ -35,21 +35,20 @@ delete it from here — this file holds what Magpie *isn't*.
 | | | Bump |
 | --- | --- | --- |
 | | **The big two** | |
-| 1 | [A "Send it to…" tab — route by destination](#1-a-send-it-to-tab--route-by-destination) | MINOR |
+| 1 | ["Send it to…" — flows for the places files go](#1-send-it-to--flows-for-the-places-files-go) | MINOR |
 | 2 | [Trim and crop — the content Magpie cannot touch](#2-trim-and-crop--the-content-magpie-cannot-touch) | MINOR |
 | | **Worth doing next** | |
 | 3 | [Hardware acceleration beyond NVIDIA](#3-hardware-acceleration-beyond-nvidia) | MINOR |
 | 4 | [A results ledger](#4-a-results-ledger) | MINOR |
-| 5 | [Flows — chaining the tabs together](#5-flows--chaining-the-tabs-together) | MINOR |
-| 6 | [A CLI, and Explorer's right-click menu](#6-a-cli-and-explorers-right-click-menu) | MINOR |
-| 7 | [AV1 on the Shrink tab](#7-av1-on-the-shrink-tab) | MINOR |
+| 5 | [A CLI, and Explorer's right-click menu](#5-a-cli-and-explorers-right-click-menu) | MINOR |
+| 6 | [AV1 on the Shrink tab](#6-av1-on-the-shrink-tab) | MINOR |
 | | **Small wins** | |
-| 8 | [Thumbnails in the queues](#8-thumbnails-in-the-queues) | MINOR |
-| 9 | [Subtitle burn-in](#9-subtitle-burn-in) | MINOR |
-| 10 | [The queue survives a restart](#10-the-queue-survives-a-restart) | PATCH |
-| 11 | [Clipboard watcher on Download](#11-clipboard-watcher-on-download) | MINOR |
-| 12 | [Dedupe by content, not by URL](#12-dedupe-by-content-not-by-url) | PATCH |
-| 13 | [An audio path worth the name](#13-an-audio-path-worth-the-name) | MINOR |
+| 7 | [Thumbnails in the queues](#7-thumbnails-in-the-queues) | MINOR |
+| 8 | [Subtitle burn-in](#8-subtitle-burn-in) | MINOR |
+| 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) | PATCH |
+| 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) | MINOR |
+| 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) | PATCH |
+| 12 | [An audio path worth the name](#12-an-audio-path-worth-the-name) | MINOR |
 | | [**Parked**](#parked) — considered, and not obviously worth it | |
 
 ---
@@ -58,17 +57,19 @@ delete it from here — this file holds what Magpie *isn't*.
 
 The ones that change what Magpie is, rather than what it has.
 
-### 1. A "Send it to…" tab — route by destination
+### 1. "Send it to…" — flows for the places files go
 
-- [ ] **The problem.** The four tabs are verbs because that is what people
-  arrive with. But the verb most people actually arrive with is *"I need to
-  post this somewhere"*, and Magpie makes them translate that into a codec, a
+- [ ] **The problem.** The tabs are verbs because that is what people arrive
+  with. But the verb most people actually arrive with is *"I need to post
+  this somewhere"*, and Magpie makes them translate that into a codec, a
   size cap, a resolution and an aspect ratio by hand — four lookups on four
   websites before they can touch a dropdown. Nobody thinks *"H.264 at 1080p
   in 9.8 MB"*. They think *"Discord"*.
 
-  **What to build.** A fifth tab that takes files and a destination, and
-  derives the settings from it. The constraints are public and stable:
+  **What to build.** Not a tab any more — the *Flow*
+  page already runs steps and saves them under a name, and Magpie's own
+  flows would sit in that list beside yours. What is left is the table
+  behind them, and the built-in profiles each step would name:
 
   | Target | What it means |
   | --- | --- |
@@ -78,19 +79,18 @@ The ones that change what Magpie is, rather than what it has.
   | Email | ≤20 MB, and playable on anything |
   | Premiere | the H.264-or-ProRes logic the README already explains at length |
 
-  It composes machinery that already exists — Shrink hits a size, Resize hits
-  a resolution, Convert hits a codec — so most of the work is the panel and
-  the table behind it. It should show what it derived, the way every other
-  profile shows what it pinned, rather than being a black box with a logo on
-  it.
+  So the work is the numbers and keeping them right, plus built-in profiles
+  for Shrink and Resize to hang them on — `ProfileSet` already takes a
+  `builtin=` tuple and a module-level dict, which is how Convert's own four
+  work. The aspect-ratio targets still want
+  [Trim and crop](#2-trim-and-crop--the-content-magpie-cannot-touch).
 
-  **Where it lands.** A new tab in `app.py`, a target table in `codecs.py`,
-  reusing `convert_jobs_for` and the shrink job builders.
-  Depends on [Trim and crop](#2-trim-and-crop--the-content-magpie-cannot-touch)
-  for the aspect-ratio targets.
+  **Where it lands.** A flows table in `flows.py`, built-in profiles beside
+  the ones in `codecs.py`.
 
-  **Size.** A weekend for the tab, longer to get the targets right and keep
-  them right.
+  **Size.** A weekend to get the targets right, and forever to keep them
+  right — which is the real cost, and the reason to write them down in one
+  table rather than spread through a panel.
 
 ### 2. Trim and crop — the content Magpie cannot touch
 
@@ -123,7 +123,7 @@ The ones that change what Magpie is, rather than what it has.
 
   **Size.** A week, mostly because setting in and out points without a
   preview is miserable — see
-  [Thumbnails and preview](#8-thumbnails-in-the-queues).
+  [Thumbnails and preview](#7-thumbnails-in-the-queues).
 
 ---
 
@@ -192,46 +192,7 @@ High value, and each one contained enough to finish in a sitting or two.
 
   **Size.** A weekend.
 
-### 5. Flows — chaining the tabs together
-
-- [ ] **The problem.** Every multi-step job means driving the app once per
-  step: download forty links, switch to Resize, find the forty files that
-  just landed, add them, resize, switch to Shrink, find *those* forty, add
-  them, shrink. None of it is repeatable, and none of it survives closing
-  the window — the settings for step two are whatever was on the panel when
-  you got there.
-
-  **What to build.** Steps you can name, order, save and run again: a flow
-  is a list of `(verb, profile)`, and a flow is itself a profile. It has a
-  plan of its own — **Flows** — because the failures here are
-  all in the details.
-
-  **This entry used to be called "the machinery is already written", and
-  said the runner already did it.** Reading the code properly says
-  otherwise, which is most of why the plan exists:
-
-  - Every `FFMPEG` job reports **no produced files at all** — `_run_process`
-    only harvests yt-dlp's sentinel lines and gallery-dl's paths. So nothing
-    can chain off a Convert or a Shrink until jobs declare what they write.
-  - `Job.chain` is global and positional — "the previous non-sharing job
-    failed" — so it cannot mean "this file's earlier step failed" while
-    thirty-nine other files carry on.
-  - `Runner.start(expand=…)` is one hop, and only for `kind == VIDEO`.
-  - Half the job builders read the panel rather than a settings dict, and a
-    stage is built on the runner thread where widgets cannot be touched.
-
-  What *is* already there is the vocabulary — a profile is a page's settings
-  under a name — and the Convert queue, which already freezes settings per
-  file and mixes profiles in one run.
-
-  **Where it lands.** `runner.py` for the engine, `app.py` for the builders
-  and the tab, a `flows.json` beside the other profile files.
-
-  **Size.** Four phases, each useful alone; a week to the tab. It also
-  swallows [Send it to…](#1-a-send-it-to-tab--route-by-destination), which
-  becomes a handful of built-in flows rather than a tab of its own.
-
-### 6. A CLI, and Explorer's right-click menu
+### 5. A CLI, and Explorer's right-click menu
 
 - [ ] **The problem.** `cli.py` handles `--check` and
   `--backend` and nothing else, so Magpie cannot be scripted, scheduled, or
@@ -260,7 +221,7 @@ High value, and each one contained enough to finish in a sitting or two.
   **Size.** A weekend for the CLI. The shell integration is a day and a lot
   of care about uninstalling cleanly.
 
-### 7. AV1 on the Shrink tab
+### 6. AV1 on the Shrink tab
 
 - [ ] **The problem.** Shrink's whole job is *fit inside N MB and look as good
   as possible*, and it does it with H.264 — a codec from 2003. SVT-AV1 at the
@@ -272,7 +233,7 @@ High value, and each one contained enough to finish in a sitting or two.
   attached: it is slower, and it will not play everywhere H.264 plays. Which
   makes it a choice rather than a default — and makes it wrong for the
   Discord target in
-  [Send it to…](#1-a-send-it-to-tab--route-by-destination), which needs
+  [Send it to…](#1-send-it-to--flows-for-the-places-files-go), which needs
   universal playback more than it needs the last 30%.
 
   **Where it lands.** `codecs.py`, the shrink job builder.
@@ -283,7 +244,7 @@ High value, and each one contained enough to finish in a sitting or two.
 
 ## Small wins
 
-### 8. Thumbnails in the queues
+### 7. Thumbnails in the queues
 
 - [ ] **The problem.** It is a media tool whose queues are lists of filenames.
   Working out which of forty rows is the wrong one means reading forty names.
@@ -295,7 +256,7 @@ High value, and each one contained enough to finish in a sitting or two.
   This is also what makes [Trim](#2-trim-and-crop--the-content-magpie-cannot-touch)
   bearable, so the two are worth doing in that order.
 
-### 9. Subtitle burn-in
+### 8. Subtitle burn-in
 
 - [ ] **The problem.** Magpie downloads subtitles and then cannot burn them
   in. Soft subtitles vanish on Instagram, on TikTok, and on import to
@@ -304,7 +265,7 @@ High value, and each one contained enough to finish in a sitting or two.
   **What to build.** `-vf subtitles=` on the Convert tab, taking either an
   embedded track or a sidecar `.srt`/`.vtt`.
 
-### 10. The queue survives a restart
+### 9. The queue survives a restart
 
 - [ ] **The problem.** Convert rows each carry the settings that were showing
   when they went in — that is the whole point of the queue, and it is real
@@ -314,7 +275,7 @@ High value, and each one contained enough to finish in a sitting or two.
   **What to build.** Write the queue to `profiles/` with everything else, and
   offer it back on the next launch rather than restoring it silently.
 
-### 11. Clipboard watcher on Download
+### 10. Clipboard watcher on Download
 
 - [ ] **The problem.** Copy a link, switch to Magpie, click Paste. The middle
   step is the program asking to be told something it could have noticed.
@@ -323,7 +284,7 @@ High value, and each one contained enough to finish in a sitting or two.
   appends itself to the box. Off by default — a program that reads your
   clipboard unasked is not a good neighbour.
 
-### 12. Dedupe by content, not by URL
+### 11. Dedupe by content, not by URL
 
 - [ ] **The problem.** `Skip already downloaded` keys on the URL, so two links
   to the same asset both land and you get it twice under two names.
@@ -331,7 +292,7 @@ High value, and each one contained enough to finish in a sitting or two.
   **What to build.** Hash what arrives, and say so when a new file matches
   one already in the destination. Say, not delete.
 
-### 13. An audio path worth the name
+### 12. An audio path worth the name
 
 - [ ] **The problem.** Audio is a checkbox on the Download tab and a
   loudness tick on Convert. There is no way to take a file and get sensible
@@ -351,7 +312,7 @@ not get had twice.
 
 | Idea | Why it is parked |
 | --- | --- |
-| **Watch folders** | Real value, but it wants Magpie running all the time, and Magpie is a thing you open. Revisit once [the CLI](#6-a-cli-and-explorers-right-click-menu) exists — a scheduled task calling the CLI is the same feature without the daemon. |
+| **Watch folders** | Real value, but it wants Magpie running all the time, and Magpie is a thing you open. Revisit once [the CLI](#5-a-cli-and-explorers-right-click-menu) exists — a scheduled task calling the CLI is the same feature without the daemon. |
 | **Before/after compare** | Lovely, and a lot of window for a question that a thumbnail and a file size mostly answer. |
 | **Resuming an interrupted encode** | ffmpeg has no honest way to resume a partial encode. Segment-and-concat is a different program. |
 | **Cross-platform (macOS / Linux)** | Everything in `meta.py`, `theme.py` and `menus.py` is Windows to the bone, and the registry theme read and Inno installer are load-bearing. A port is a rewrite of the bottom half. |
