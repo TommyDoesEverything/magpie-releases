@@ -40,7 +40,7 @@ delete it from here — this file holds what Magpie *isn't*.
 | | **Worth doing next** | |
 | 3 | [Hardware acceleration beyond NVIDIA](#3-hardware-acceleration-beyond-nvidia) | MINOR |
 | 4 | [A results ledger](#4-a-results-ledger) | MINOR |
-| 5 | [Pipelines — the machinery is already written](#5-pipelines--the-machinery-is-already-written) | MINOR |
+| 5 | [Flows — chaining the tabs together](#5-flows--chaining-the-tabs-together) | MINOR |
 | 6 | [A CLI, and Explorer's right-click menu](#6-a-cli-and-explorers-right-click-menu) | MINOR |
 | 7 | [AV1 on the Shrink tab](#7-av1-on-the-shrink-tab) | MINOR |
 | | **Small wins** | |
@@ -192,23 +192,44 @@ High value, and each one contained enough to finish in a sitting or two.
 
   **Size.** A weekend.
 
-### 5. Pipelines — the machinery is already written
+### 5. Flows — chaining the tabs together
 
-- [ ] **The problem.** Every multi-step job means driving the app twice by
-  hand: download it, then switch tabs, then add the file you just made, then
-  shrink it. Meanwhile `Job.chain`, `Job.retry` and
-  `Runner.start(expand=…)` already exist, and one
-  pipeline is already hard-coded on top of them —
-  download then convert for editing.
+- [ ] **The problem.** Every multi-step job means driving the app once per
+  step: download forty links, switch to Resize, find the forty files that
+  just landed, add them, resize, switch to Shrink, find *those* forty, add
+  them, shrink. None of it is repeatable, and none of it survives closing
+  the window — the settings for step two are whatever was on the panel when
+  you got there.
 
-  **What to build.** Generalise that one case into a **Then…** row on every
-  tab. Download → Shrink to 10 MB. Resize → Shrink. Convert → move to
-  archive, which is already special-cased and would stop needing to be.
+  **What to build.** Steps you can name, order, save and run again: a flow
+  is a list of `(verb, profile)`, and a flow is itself a profile. It has a
+  plan of its own — **Flows** — because the failures here are
+  all in the details.
 
-  **Where it lands.** `app.py`, mostly. The runner already does it.
+  **This entry used to be called "the machinery is already written", and
+  said the runner already did it.** Reading the code properly says
+  otherwise, which is most of why the plan exists:
 
-  **Size.** An evening for the plumbing, a weekend to make the UI honest
-  about what will run.
+  - Every `FFMPEG` job reports **no produced files at all** — `_run_process`
+    only harvests yt-dlp's sentinel lines and gallery-dl's paths. So nothing
+    can chain off a Convert or a Shrink until jobs declare what they write.
+  - `Job.chain` is global and positional — "the previous non-sharing job
+    failed" — so it cannot mean "this file's earlier step failed" while
+    thirty-nine other files carry on.
+  - `Runner.start(expand=…)` is one hop, and only for `kind == VIDEO`.
+  - Half the job builders read the panel rather than a settings dict, and a
+    stage is built on the runner thread where widgets cannot be touched.
+
+  What *is* already there is the vocabulary — a profile is a page's settings
+  under a name — and the Convert queue, which already freezes settings per
+  file and mixes profiles in one run.
+
+  **Where it lands.** `runner.py` for the engine, `app.py` for the builders
+  and the tab, a `flows.json` beside the other profile files.
+
+  **Size.** Four phases, each useful alone; a week to the tab. It also
+  swallows [Send it to…](#1-a-send-it-to-tab--route-by-destination), which
+  becomes a handful of built-in flows rather than a tab of its own.
 
 ### 6. A CLI, and Explorer's right-click menu
 
