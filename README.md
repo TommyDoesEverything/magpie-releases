@@ -1,7 +1,8 @@
 # Magpie — releases
 
 Magpie is a small Windows app for getting media off the web and into the shape
-you need it in. Four tabs, named after what you actually came to do:
+you need it in. Four tabs named after what you actually came to do, and a
+fifth that puts them in an order:
 
 | Tab | What it is for |
 | --- | --- |
@@ -9,10 +10,18 @@ you need it in. Four tabs, named after what you actually came to do:
 | **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants |
 | **Resize** | Change the dimensions of video or pictures |
 | **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and look as good as possible doing it |
+| **Flow** | Do several of those in a row: download these links, resize what comes back, then get it all under ten megabytes. Saved under a name and run again whenever |
 
-The last three work on files from anywhere, not only on things Magpie
-downloaded. Drag them onto the window and they land on the tab you dropped
-them on.
+Convert, Resize and Shrink work on files from anywhere, not only on things
+Magpie downloaded. Drag them onto the window and they land on the tab you
+dropped them on.
+
+A **flow** is how you stop driving the app once per step. Each step is one of
+the four tabs and one of its saved profiles, so *download at full quality,
+resize to 1080p, get under 10 MB* is one thing you set up once. Everything is
+checked before it starts — every profile, every tool, the folder it writes to
+— because a forty-minute download that fails at the last step is the failure
+worth designing against.
 
 This repo carries the published versions and the manifest Magpie reads to keep
 itself up to date. Development happens in a separate, private repo.

@@ -105,6 +105,59 @@ clip, and ask first.**
 
 ---
 
+## What flows cost, and what the new pictures path costs
+
+**Measured** — 2026-09-06, before releasing 2.16.0. Twelve 1200x800 noise
+PNGs, three runs, on the machine at the top - the spread is
+quoted rather than the best, because these are all under a second and
+noisy at that scale.
+
+### The flow engine
+
+| Twelve pictures, one resize | |
+| --- | --- |
+| Straight from the Resize tab | 0.54 – 0.57 s |
+| The same work as a one-step flow | 0.62 – 0.68 s |
+| | **+13 to +20%** |
+| The same twelve through a three-step flow | 0.64 – 0.66 s |
+
+**What it decided.** Nothing needs changing. The overhead is the working
+folder and the delivery move at the end, and it is per *run* rather than
+per step - three steps cost barely more than one, because the two after the
+first are working on files a quarter the size. A flow is not the fast way to
+do one thing; it is the way to do three without driving the window three
+times, and 13% of half a second is the right price for that.
+
+The delivery move is a rename, not a copy, because the working folder lives
+inside the destination on purpose. That is why the number is this small
+rather than doubling on large files - it does not scale with how big the
+files are.
+
+### The animation ladder
+
+| | |
+| --- | --- |
+| 2.4 MB, 14 frames, under a 500 KB limit | 431 KB, **14 frames**, ~1.1 s |
+
+Two passes of the ladder: full size at 256 colours, then one measured hop
+down. Before this it took about a third as long and produced a
+single-frame PNG, which is not a faster answer to the same question - it is
+a fast answer to a different one.
+
+### The settings form
+
+| Page | Fields | Built and shown |
+| --- | --- | --- |
+| Shrink | 2 | 13 – 16 ms |
+| Convert | 22 | 47 – 58 ms |
+| Download | 33 | 64 – 78 ms |
+
+**What it decided.** Nothing. Building a form from the field tables costs
+about 2 ms a field, which nobody can see, and the Download form is the
+worst case in the program.
+
+---
+
 ## When adding to this file
 
 1. Say what the measurement was *for* — which decision it was going to
