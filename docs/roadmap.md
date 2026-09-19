@@ -48,7 +48,6 @@ delete it from here — this file holds what Magpie *isn't*.
 | 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) | PATCH |
 | 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) | MINOR |
 | 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) | PATCH |
-| 12 | [An audio path worth the name](#12-an-audio-path-worth-the-name) | MINOR |
 | | [**Parked**](#parked) — considered, and not obviously worth it | |
 
 ---
@@ -291,17 +290,6 @@ High value, and each one contained enough to finish in a sitting or two.
 
   **What to build.** Hash what arrives, and say so when a new file matches
   one already in the destination. Say, not delete.
-
-### 12. An audio path worth the name
-
-- [ ] **The problem.** Audio is a checkbox on the Download tab and a
-  loudness tick on Convert. There is no way to take a file and get sensible
-  audio out of it — extract, normalise to a target, and write it as
-  something.
-
-  **What to build.** Broadcast and podcast loudness targets (−23 LUFS,
-  −16 LUFS) rather than only `loudnorm` on or off, and audio extraction on
-  the Convert tab rather than only at download time.
 
 ---
 

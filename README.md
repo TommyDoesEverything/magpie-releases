@@ -7,14 +7,21 @@ fifth that puts them in an order:
 | Tab | What it is for |
 | --- | --- |
 | **Download** | Paste links. Magpie works out where each one should go — yt-dlp for video and audio, gallery-dl for image galleries, instaloader for Instagram archives — and drives all three from one window |
-| **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants |
-| **Resize** | Change the dimensions of video or pictures |
-| **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and look as good as possible doing it |
+| **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants, and fifteen audio formats |
+| **Resize** | Change the dimensions of video or pictures, or the sample rate of audio |
+| **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and sound or look as good as possible doing it |
 | **Flow** | Do several of those in a row: download these links, resize what comes back, then get it all under ten megabytes. Saved under a name and run again whenever |
 
 Convert, Resize and Shrink work on files from anywhere, not only on things
 Magpie downloaded. Drag them onto the window and they land on the tab you
 dropped them on.
+
+Each of those three takes **video, images and audio** alike, and works out
+which is which from the file itself — so a folder of clips, stills and songs
+can go in together and each one is sent to the right engine. Audio is a kind
+of file here rather than a checkbox: fifteen formats to write, loudness
+targets for broadcast, podcast and streaming delivery, and a tick that takes
+the soundtrack out of a video and leaves the picture behind.
 
 A **flow** is how you stop driving the app once per step. Each step is one of
 the four tabs and one of its saved profiles, so *download at full quality,
@@ -48,7 +55,11 @@ copy doesn't carry the download marker that triggers the warning.
 
 On first run Magpie offers to fetch `yt-dlp.exe`, and offers `ffmpeg` the
 first time something needs it (about 73 MB — it's what joins the best video to
-the best audio).
+the best audio). Everything else it might want is offered the same way, when
+and only when something asks for it: `pngquant` for shrinking pictures, and a
+fuller `ffmpeg` build for one voice codec. Two of the fifteen audio formats
+need something extra, and Magpie says so in the panel rather than at the end
+of a batch.
 
 ## Updating
 
