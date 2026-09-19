@@ -64,12 +64,18 @@ of a batch.
 ## Updating
 
 Magpie updates itself. It looks for a new version at startup and shows a quiet
-*"a new version is available"* button when it finds one. Nothing installs
-without you clicking it, and nothing ever interrupts a download in progress.
+*"a new version is available"* button when it finds one. Nothing interrupts a
+download in progress.
+
+By default nothing installs without you clicking it. If you would rather not
+click, tick **Help → Install Updates Automatically** — or the box the versions
+window offers when you install one by hand. Magpie then installs new versions
+quietly in the background, and the new one runs the next time you open it:
+nothing restarts underneath you, and a job in progress is never interrupted.
 
 **Help → Versions and Release Notes…** lists every release, with dates and
-what changed. Install any of them, including going back if something new
-misbehaves. **Help → Check for Updates at Startup** turns the check off
+what changed — newest first, opening on the newest. Install any of them,
+including going back if something new misbehaves. **Help → Check for Updates at Startup** turns the check off
 entirely.
 
 Your settings, cookies, and downloaded files are never touched by an update.
