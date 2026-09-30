@@ -39,14 +39,26 @@ argued with rather than remembered badly.
 
 ## Installing
 
-1. Download **`Magpie.exe`** from the [latest release](../../releases/latest).
-2. Put it in a folder of its own — `Documents\Magpie` is fine. Magpie writes
-   its settings and downloaded tools next to itself, so it needs somewhere it
-   can write. **Not** `Program Files`.
-3. Double-click it.
+Each [release](../../releases/latest) has two downloads. They are the same
+program; the difference is where it lives and where it keeps your settings.
 
-There is nothing to install. Python, the image backends, and everything else
-Magpie needs are inside the exe.
+**`Magpie-Setup-<version>.exe`** installs it. It starts by asking who Magpie
+is for:
+
+| | Installs to | Updates |
+| --- | --- | --- |
+| **Just me** | `%LOCALAPPDATA%\Programs\TommyDoesEverything\Magpie` | Quietly, with no administrator |
+| **All users** | `C:\Program Files\TommyDoesEverything\Magpie` | Through the installer, with a Windows permission prompt each time |
+
+Your settings go in `%LOCALAPPDATA%\Magpie` either way, and uninstalling asks
+before deleting them.
+
+**`Magpie.exe`** on its own is the portable copy. Put it anywhere and
+double-click it; everything it writes goes into one `Magpie` folder beside
+it, so moving the two moves Magpie, settings and all.
+
+Python, the image backends, and everything else Magpie needs are inside the
+exe either way.
 
 Windows will say **"Windows protected your PC"** the first time, because the
 exe isn't signed by a paid-for certificate. Click **More info → Run anyway**.
@@ -77,6 +89,13 @@ nothing restarts underneath you, and a job in progress is never interrupted.
 what changed — newest first, opening on the newest. Install any of them,
 including going back if something new misbehaves. **Help → Check for Updates at Startup** turns the check off
 entirely.
+
+A copy installed **for all users** can't replace its own program file —
+only an administrator can write to `Program Files` — so it updates by running
+the new version's installer. Windows asks for permission; say no and nothing
+changes. Say yes and Magpie closes, updates, and opens again by itself.
+Automatic installs don't apply to it, since each one needs that prompt
+answered.
 
 Your settings, cookies, and downloaded files are never touched by an update.
 The version being replaced is kept beside the app as `Magpie.prev.exe`; if a
