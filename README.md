@@ -51,7 +51,9 @@ is for:
 | **All users** | `C:\Program Files\TommyDoesEverything\Magpie` | Through the installer, with a Windows permission prompt each time |
 
 Your settings go in `%LOCALAPPDATA%\Magpie` either way, and uninstalling asks
-before deleting them.
+before deleting them. Installed for all users, the tools Magpie downloads —
+yt-dlp, ffmpeg, pngquant — are shared by everyone on the PC in
+`%PROGRAMDATA%\TommyDoesEverything\Magpie\bin`, so they're fetched once.
 
 **`Magpie.exe`** on its own is the portable copy. Put it anywhere and
 double-click it; everything it writes goes into one `Magpie` folder beside
