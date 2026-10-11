@@ -12,6 +12,16 @@ fifth that puts them in an order:
 | **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and sound or look as good as possible doing it |
 | **Flow** | Do several of those in a row: download these links, resize what comes back, then get it all under ten megabytes. Saved under a name and run again whenever |
 
+The Download tab tells you what you're getting before you get it. **Pick
+Quality…** looks at one link and lists the resolutions it really has, each
+with its size, so you can choose by megabytes rather than by guesswork. While
+a download runs, the clock says how fast it's coming down and how long is
+left; if one fails, the status line says why — *"Video unavailable. This
+video is private"* — rather than pointing at the log. **Recent…** brings back
+the last fifty links, a link you've just copied is offered when you switch to
+Magpie, and **Stop** takes its half-written files with it. Right-click any box
+for Cut, Copy and Paste.
+
 Convert, Resize and Shrink work on files from anywhere, not only on things
 Magpie downloaded. Drag them onto the window and they land on the tab you
 dropped them on.
@@ -50,7 +60,7 @@ is for:
 | **Just me** | `%LOCALAPPDATA%\Programs\TommyDoesEverything\Magpie` | Quietly, with no administrator |
 | **All users** | `C:\Program Files\TommyDoesEverything\Magpie` | Through the installer, with a Windows permission prompt each time |
 
-Your settings go in `%LOCALAPPDATA%\Magpie` either way, and uninstalling asks
+Your settings go in `%LOCALAPPDATA%\TommyDoesEverything\Magpie` either way, and uninstalling asks
 before deleting them. Installed for all users, the tools Magpie downloads —
 yt-dlp, ffmpeg, pngquant — are shared by everyone on the PC in
 `%PROGRAMDATA%\TommyDoesEverything\Magpie\bin`, so they're fetched once.

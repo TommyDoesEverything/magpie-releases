@@ -48,6 +48,7 @@ delete it from here — this file holds what Magpie *isn't*.
 | 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) | PATCH |
 | 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) | MINOR |
 | 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) | PATCH |
+| | [**Watching**](#watching) — other projects worth reading for ideas | |
 | | [**Parked**](#parked) — considered, and not obviously worth it | |
 
 ---
@@ -283,6 +284,11 @@ High value, and each one contained enough to finish in a sitting or two.
   appends itself to the box. Off by default — a program that reads your
   clipboard unasked is not a good neighbour.
 
+  **The smaller answer shipped first.** Magpie now looks once, when it
+  comes to the front with the link box empty, and *offers* a copied link
+  rather than taking it. Build the watcher only if that turns out not to
+  be enough. [yoinks](#watching) has the same idea on its own list.
+
 ### 11. Dedupe by content, not by URL
 
 - [ ] **The problem.** `Skip already downloaded` keys on the URL, so two links
@@ -306,6 +312,25 @@ not get had twice.
 | **Cross-platform (macOS / Linux)** | Everything in `meta.py`, `theme.py` and `menus.py` is Windows to the bone, and the registry theme read and Inno installer are load-bearing. A port is a rewrite of the bottom half. |
 | **Plugin system** | Nothing is asking for one. The custom-arguments escape hatches already cover the cases a plugin would. |
 | **Keyboard accelerators** | Deliberately absent — see *The menus*. Worth revisiting *only* for shortcuts that cannot fire while someone is typing in the link box. |
+
+---
+
+## Watching
+
+Other projects close enough to Magpie that their ideas are worth reading.
+Each one is checked now and then, from the commit it was last read to, and
+anything worth having becomes an entry above — or a line in
+[Parked](#parked), so it is not read twice.
+
+| Project | What it is | Read to | Taken from it |
+| --- | --- | --- | --- |
+| [pablostanley/yoinks](https://github.com/pablostanley/yoinks) | A terminal downloader over yt-dlp: paste a link, pick a resolution, done | `6f03720` (2026-07-16) | [10](#10-clipboard-watcher-on-download) — and, shipped in 2.27, the capped presets, failure reasons, Stop's tidy-up, speed and time left, Recent links, the copied-link offer and Pick Quality |
+
+Read and not taken from yoinks: its terminal interface, mouse handling and
+themes (Magpie is a Tk window with its own), fetching yt-dlp on first run
+(Magpie already does, with update channels), its planned `--best` / `--mp3`
+/ `-o` flags (that is [the CLI](#5-a-cli-and-explorers-right-click-menu)),
+and its table of site names (`routing.py` already routes by host).
 
 ---
 
