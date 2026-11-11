@@ -27,6 +27,12 @@ Cut, Copy and Paste. Pictures come from places that make it hard, too:
 paste the IMDb page a poster opens on and you get the poster itself, at
 full size.
 
+For anything behind a sign-in, export the site's cookies with the
+[Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY)
+browser extension: Magpie notices the file in your Downloads folder when
+you switch back to it, offers to use it, and deletes it once it has the
+cookies. IMDb needs this too, for its pictures.
+
 Convert, Resize and Shrink work on files from anywhere, not only on things
 Magpie downloaded. Drag them onto the window and they land on the page you
 dropped them on; drop a folder on a **Save to** and that is where the

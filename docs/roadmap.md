@@ -45,6 +45,7 @@ delete it from here — this file holds what Magpie *isn't*.
 | 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) |
 | 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) |
 | 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) |
+| 12 | [A Magpie extension for Chrome and Edge](#12-a-magpie-extension-for-chrome-and-edge) |
 | | [**Watching**](#watching) — other projects worth reading for ideas |
 | | [**Parked**](#parked) — considered, and not obviously worth it |
 
@@ -294,6 +295,51 @@ High value, and each one contained enough to finish in a sitting or two.
   **What to build.** Hash what arrives, and say so when a new file matches
   one already in the destination. Say, not delete.
 
+### 12. A Magpie extension for Chrome and Edge
+
+- [ ] **The problem.** Since Chrome 127, App-Bound Encryption means no
+  program but the browser can read Chrome's or Edge's cookies, so **Read
+  from a browser** only works for Firefox. Today's way round it is an
+  export: Get cookies.txt LOCALLY saves a site's cookies to Downloads and
+  Magpie picks the file up as it comes to the front
+  (*Exported cookies are picked up*).
+  It works - IMDb's pictures need it - but it is a click in the browser
+  every time a session goes stale, and a sign-in passing through Downloads.
+
+  **What to build.** A Magpie extension that Magpie asks for one site's
+  cookies when a download needs them, over Chrome's **native messaging** -
+  only that extension can talk to Magpie, and no port is opened. Started
+  from Get cookies.txt LOCALLY, which is MIT-licensed: its cookie reading
+  is the part worth keeping, with its notice kept. Then:
+  - the native host: `Magpie.exe --native-host`, registered under
+    `HKCU\Software\Google\Chrome\NativeMessagingHosts` and Edge's
+    equivalent, by the installer and by a portable copy for itself, and
+    taken out on uninstall;
+  - the extension's ID pinned with a `key` in its manifest, so an unpacked
+    copy and the store's are the same extension to the host;
+  - site access asked for per site (`optional_host_permissions`), never
+    every site at once;
+  - **The Magpie extension** as a fourth source in the cookie assistant,
+    with a check that it is connected, and a download that fails for want
+    of a sign-in asking it before giving up;
+  - a **Send this site to Magpie** button in the extension, for doing it
+    by hand.
+
+  **Publishing.** The Chrome Web Store developer account is paid for. An
+  extension asking for `cookies`, site access and `nativeMessaging` gets an
+  in-depth review - days to weeks - and needs a privacy policy URL (a page
+  in the releases repo: cookies go to Magpie on the same computer and
+  nowhere else) and a line justifying each permission. The same package
+  goes to Edge Add-ons, free. Firefox needs none of it: its cookies can be
+  read already.
+
+  **Where it lands.** A new `extension/` folder, `entry.py` for the host,
+  `gui/cookies.py`, `installer/Magpie.iss`.
+
+  **Size.** Two days for the extension and Magpie's side; the store's
+  review on top, so Magpie's side ships in the release after it is
+  approved.
+
 ---
 
 ## Parked
@@ -306,7 +352,7 @@ not get had twice.
 | **Watch folders** | Real value, but it wants Magpie running all the time, and Magpie is a thing you open. Revisit once [the CLI](#5-a-cli-and-explorers-right-click-menu) exists — a scheduled task calling the CLI is the same feature without the daemon. |
 | **Before/after compare** | Lovely, and a lot of window for a question that a thumbnail and a file size mostly answer. |
 | **Resuming an interrupted encode** | ffmpeg has no honest way to resume a partial encode. Segment-and-concat is a different program. |
-| **Cross-platform (macOS / Linux)** | Everything in `meta.py`, `theme.py` and `menus.py` is Windows to the bone, and the registry theme read and Inno installer are load-bearing. A port is a rewrite of the bottom half. |
+| **Cross-platform (macOS / Linux)** | Everything in `meta.py`, `gui/native.py` and `gui/dragdrop.py` is Windows to the bone, and the registry theme read and Inno installer are load-bearing. Slint itself would come along; the rest is a rewrite of the bottom half. |
 | **Plugin system** | Nothing is asking for one. The custom-arguments escape hatches already cover the cases a plugin would. |
 | **Keyboard accelerators** | Deliberately absent — see *The menus*. Worth revisiting *only* for shortcuts that cannot fire while someone is typing in the link box. |
 
