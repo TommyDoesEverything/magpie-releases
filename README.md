@@ -1,10 +1,12 @@
 # Magpie — releases
 
 Magpie is a small Windows app for getting media off the web and into the shape
-you need it in. Four tabs named after what you actually came to do, and a
+you need it in. Four pages named after what you actually came to do, and a
 fifth that puts them in an order:
 
-| Tab | What it is for |
+![Magpie's Download page, in the light theme](docs/images/download-light.png)
+
+| Page | What it is for |
 | --- | --- |
 | **Download** | Paste links. Magpie works out where each one should go — yt-dlp for video and audio, gallery-dl for image galleries, instaloader for Instagram archives — and drives all three from one window |
 | **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants, and fifteen audio formats |
@@ -12,19 +14,26 @@ fifth that puts them in an order:
 | **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and sound or look as good as possible doing it |
 | **Flow** | Do several of those in a row: download these links, resize what comes back, then get it all under ten megabytes. Saved under a name and run again whenever |
 
-The Download tab tells you what you're getting before you get it. **Pick
-Quality…** looks at one link and lists the resolutions it really has, each
-with its size, so you can choose by megabytes rather than by guesswork. While
-a download runs, the clock says how fast it's coming down and how long is
-left; if one fails, the status line says why — *"Video unavailable. This
-video is private"* — rather than pointing at the log. **Recent…** brings back
-the last fifty links, a link you've just copied is offered when you switch to
-Magpie, and **Stop** takes its half-written files with it. Right-click any box
-for Cut, Copy and Paste.
+The Download page tells you what you're getting before you get it. Every
+link in the list says where it is going, and **Choose for each link** looks
+at the videos and lists the resolutions they really have, each with its
+size, so you can choose by megabytes rather than by guesswork. While a
+download runs, each row says how fast it's coming down and how long is
+left; if one fails, it says why — *"Video unavailable. This video is
+private"* — rather than pointing at the log. **Recent** brings back the last
+fifty links, a link you've just copied is offered when you switch to Magpie,
+and **Stop** takes its half-written files with it. Right-click any box for
+Cut, Copy and Paste.
 
 Convert, Resize and Shrink work on files from anywhere, not only on things
-Magpie downloaded. Drag them onto the window and they land on the tab you
-dropped them on.
+Magpie downloaded. Drag them onto the window and they land on the page you
+dropped them on; drop a folder on a **Save to** and that is where the
+results go.
+
+![Magpie converting three clips, with the Activity pane open](docs/images/running-dark.png)
+
+The window was redrawn for this version: the same five jobs and the same
+settings, in a window where everything lines up, light and dark alike.
 
 Each of those three takes **video, images and audio** alike, and works out
 which is which from the file itself — so a folder of clips, stills and songs
@@ -34,7 +43,7 @@ targets for broadcast, podcast and streaming delivery, and a tick that takes
 the soundtrack out of a video and leaves the picture behind.
 
 A **flow** is how you stop driving the app once per step. Each step is one of
-the four tabs and one of its saved profiles, so *download at full quality,
+the four pages and one of its saved profiles, so *download at full quality,
 resize to 1080p, get under 10 MB* is one thing you set up once. Everything is
 checked before it starts — every profile, every tool, the folder it writes to
 — because a forty-minute download that fails at the last step is the failure

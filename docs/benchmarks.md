@@ -158,6 +158,139 @@ worst case in the program.
 
 ---
 
+## What a one-file exe costs, every time it starts
+
+**Measured** — 2026-11-02, against the question of what would make Magpie
+start faster and download faster short of a rewrite. The window was timed
+from launch until it was visible, and until the whole process tree had used
+no CPU for 300 ms ("settled"). Five runs each, warm; the same source for
+every build. Python 3.14.5, PyInstaller 6.22.2, Nuitka 4.3.4 with MSVC 14.5.
+
+### Magpie's own window
+
+| Build | Visible | Settled | On disk |
+| --- | --- | --- | --- |
+| PyInstaller `--onefile` (what 2.27.1 ships) | 1.18 – 1.47 s | 2.5 – 3.3 s | 31 MB |
+| PyInstaller `--onedir` | 0.26 – 0.40 s | 1.6 – 2.2 s | 63 MB folder |
+| Nuitka `--onefile`, unpacked once per version | 0.41 – 0.43 s | 1.7 – 1.9 s | 38 MB, plus 195 MB unpacked |
+| ...the first start of a version, unpacking | 0.72 s | 2.1 s | |
+| From source, for scale | 0.26 – 0.34 s | 2.4 – 3.1 s | |
+
+PyInstaller's one file unpacks itself into a fresh `%TEMP%` folder on
+every start, and Defender looks at everything it unpacks: a second before
+the window can appear. Nuitka's can unpack to a fixed folder
+(`--onefile-tempdir-spec`) and reuse it, and re-unpacks by itself when the
+payload changes - a rebuild under the same version number was picked up.
+
+### Every link
+
+Magpie starts one process per link, so this is paid per link, not per
+batch. `--version`, which does no work, five runs:
+
+| Started for each... | One file | Unpacked |
+| --- | --- | --- |
+| video link: yt-dlp | 0.85 – 0.88 s | 0.36 – 0.41 s (`yt-dlp_win.zip`) |
+| picture link: `Magpie.exe --backend gallery_dl` | 1.32 – 1.56 s | 0.38 s through the Nuitka stub, **0.11 s** started directly |
+| for scale: `python -m gallery_dl` | | 0.14 s |
+
+**What it decided.** Magpie is built with Nuitka (`tools/release.py`;
+`--pyinstaller` is kept for a machine without the C compiler), which keeps
+the one file the updater and the portable copy depend on, and fetches
+yt-dlp as its onedir build. yt-dlp's onedir build updates itself with `-U`
+and `--update-to` like the exe - tried both ways - and carries curl_cffi
+for `--impersonate`. A worker process kept alive to take link after link
+was the other idea; with these, it would save a further 0.1 – 0.4 s a link
+for a protocol, a respawn on Stop and global state shared between runs, so
+it was not built.
+
+**What it costs.** 195 MB unpacked per version, most of it gallery-dl's
+extractors compiled to C (the exe inside is 146 MB); the folder an update
+leaves behind is removed once the new version has started. And a release
+build takes several minutes rather than one.
+
+**What the second and a half after the window appears is.** The same in
+every build, so it is the window and not the packaging. Profiled from
+source: about 1.0 s laying out every page, hidden ones included (the first
+`update_idletasks`, in `drops._attach` and `_lay_out`), 0.46 s drawing the
+rounded controls pixel by pixel in Python (`cards._draw_round`), and 0.2 s
+creating 700-odd widgets.
+
+---
+
+## Four toolkits, one page
+
+**Measured** — 2026-11-02, against `docs/ui-toolkit.md`'s question of
+which toolkit New should be drawn in. The Download page as Qt Quick
+(PySide6 6.12), Slint (1.18.1b1, beta Python bindings) and WebView2
+(pywebview 6.2.1), each built with Nuitka 4.3.4 as one file unpacked once,
+against the real Tk Magpie built the same way. Timed as in the entry above;
+memory summed over the process tree one second after it settled. Five runs,
+medians; three for the renderer variants.
+
+| | Visible | Settled | Private | Working set | Download | Unpacked |
+| --- | --- | --- | --- | --- | --- | --- |
+| Tk Magpie, whole app | 0.43 s | 1.99 s | 40 MB | 114 MB | 38 MB | 195 MB |
+| Qt Quick | 1.69 s | 1.89 s | 182 MB | 355 MB | 121 MB | 412 MB |
+| ...its software backend | 1.63 s | 1.74 s | 112 MB | 330 MB | | |
+| Slint (default, GPU) | 0.59 s | 0.60 s | 274 MB | 241 MB | 18 MB | 50 MB |
+| Slint, software renderer | 0.27 s | 0.31 s | 72 MB | 127 MB | | |
+| WebView2, 7 processes | 0.66 s | 1.09 s | 287 MB | 443 MB | 10 MB | 31 MB |
+
+The Tk build includes the engine (gallery-dl, instaloader, Pillow); the
+trials do not.
+
+**What it decided.** Qt Quick stopped being the recommendation: it starts
+slowest of the four. Slint is the one to try harder, with its software
+renderer. The reasoning is in `docs/ui-toolkit.md`.
+
+**Watch for.** This machine sets `QT_SCALE_FACTOR_ROUNDING_POLICY=
+RoundPreferFloor` for the user, which makes every Qt app draw 150% at 100%
+unless it overrides the policy - the first Qt numbers were taken that way
+and thrown out.
+
+---
+
+## The Slint window under load
+
+**Measured** — 2026-11-07, for Part 4's Stress box in `docs/redesign.md`:
+does the new window stay responsive with a lot to show? From source
+(Python 3.14, slint 1.18.1b1, software renderer), the window on the
+second monitor at 100%. "Worst frame" is the longest gap between ticks of
+a 16 ms Slint timer, so the longest the window could not answer. Batches
+ran stand-in work jobs through the real Runner (four progress steps and a
+log line each, no Pillow or ffmpeg), so the window, not the work, is
+what is timed.
+
+| | Before | After |
+| --- | --- | --- |
+| 50,000 Activity lines at once: worst frame | 2,082 ms | 44 ms |
+| 10 s stream, ~30,000 lines/s: p99 frame | 35 ms | 19 ms |
+| 1,000 files, stand-in run: took / median frame | 11.5 s / 787 ms | 0.8 s / 16 ms |
+| 3,000 files, stand-in run: took / worst frame | - | 3.1 s / 55 ms |
+| 600 links, stand-in run: median frame | 180 ms | 16 ms |
+| 2,000 links, stand-in run: took | over 10 min (gave up) | 5.6 s, worst 31 ms |
+| Select all, 2,000 links | 803 ms | 2 ms |
+| Flow, 2,000 links: worst frame on a change | 336 ms | 22 ms |
+| Stop, real Resize, 3 lanes: worst frame | 427 ms | 187 ms |
+
+Memory, private bytes: 150 MB with the window built, 155 MB shown, flat
+through every page; a 10 s, 330,000-line stream took it to 205 MB (Copy
+keeps every line). Not the 72 MB of the toolkit trial above, which was
+one page and no engine.
+
+**What it decided.** Activity is fed a pump at a time, the link and file
+lists became ListViews, and Stop kills off the window's thread
+(`redesign.md` has each fix). The before column is what the window did
+until then.
+
+**Watch for.** Import `magpie.gui.window` before `slint` in any script
+that times the window: it sets the software renderer, which Slint reads
+on import. A harness that imported slint first measured the GPU renderer
+at 423 MB and was thrown out. And the first gap a ticker sees includes
+whatever ran before it started - reset its clock on the first tick.
+
+---
+
 ## When adding to this file
 
 1. Say what the measurement was *for* — which decision it was going to

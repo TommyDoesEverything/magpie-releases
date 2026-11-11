@@ -173,8 +173,8 @@ High value, and each one contained enough to finish in a sitting or two.
 
 ### 4. A results ledger
 
-- [ ] **The problem.** The Output pane is the only record of what happened, and
-  it dies with the window. There is no memory across sessions of what ran,
+- [ ] **The problem.** The Activity pane — Output, in the Classic layout — is
+  the only record of what happened, and it dies with the window. There is no memory across sessions of what ran,
   what came out, where it went, or whether it worked. *"Where did that file
   go"* and *"did the third one of those forty fail"* both currently mean
   scrolling a log, if the log is even still there.
@@ -194,7 +194,7 @@ High value, and each one contained enough to finish in a sitting or two.
 
 ### 5. A CLI, and Explorer's right-click menu
 
-- [ ] **The problem.** `cli.py` handles `--check` and
+- [ ] **The problem.** `entry.py` handles `--check` and
   `--backend` and nothing else, so Magpie cannot be scripted, scheduled, or
   pointed at a folder — which is a strange thing to be true of a program
   descended from three `.bat` files you dragged files onto.
@@ -216,7 +216,7 @@ High value, and each one contained enough to finish in a sitting or two.
   registered, and the portable copy should be able to register and unregister
   itself from Tools.
 
-  **Where it lands.** `cli.py`, `Magpie.iss`, a Tools menu entry.
+  **Where it lands.** `entry.py`, `Magpie.iss`, a Tools menu entry.
 
   **Size.** A weekend for the CLI. The shell integration is a day and a lot
   of care about uninstalling cleanly.
