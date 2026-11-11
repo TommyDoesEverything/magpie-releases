@@ -139,10 +139,10 @@ downloading once by hand.
 
 ## Version numbers
 
-`MAJOR.MINOR.PATCH`:
+A version is the date it was released: `2026.11.12`, and `2026.11.12.1`
+for a second release the same day. Up to 2.27.1 they were numbered
+`MAJOR.MINOR.PATCH`; Magpie compares the numbers part by part, so the dated
+versions are simply newer and an older copy updates to them as usual.
 
-- **MAJOR** — something you rely on has changed shape; worth reading the notes
-  before updating.
-- **MINOR** — Magpie can do something it couldn't before, and nothing that
-  worked has changed.
-- **PATCH** — a fix, with nothing new added.
+When an update needs a word of warning first — something you rely on
+changing shape — its notes say so at the top.

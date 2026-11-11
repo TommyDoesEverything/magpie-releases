@@ -29,27 +29,24 @@ delete it from here — this file holds what Magpie *isn't*.
 
 ## The list
 
-**Bump** is the part of the version number the entry would move — see
-[Version numbers](../README.md#version-numbers).
-
-| | | Bump |
-| --- | --- | --- |
-| | **The big two** | |
-| 1 | ["Send it to…" — flows for the places files go](#1-send-it-to--flows-for-the-places-files-go) | MINOR |
-| 2 | [Trim and crop — the content Magpie cannot touch](#2-trim-and-crop--the-content-magpie-cannot-touch) | MINOR |
-| | **Worth doing next** | |
-| 3 | [Hardware acceleration beyond NVIDIA](#3-hardware-acceleration-beyond-nvidia) | MINOR |
-| 4 | [A results ledger](#4-a-results-ledger) | MINOR |
-| 5 | [A CLI, and Explorer's right-click menu](#5-a-cli-and-explorers-right-click-menu) | MINOR |
-| 6 | [AV1 on the Shrink tab](#6-av1-on-the-shrink-tab) | MINOR |
-| | **Small wins** | |
-| 7 | [Thumbnails in the queues](#7-thumbnails-in-the-queues) | MINOR |
-| 8 | [Subtitle burn-in](#8-subtitle-burn-in) | MINOR |
-| 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) | PATCH |
-| 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) | MINOR |
-| 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) | PATCH |
-| | [**Watching**](#watching) — other projects worth reading for ideas | |
-| | [**Parked**](#parked) — considered, and not obviously worth it | |
+| | |
+| --- | --- |
+| | **The big two** |
+| 1 | ["Send it to…" — flows for the places files go](#1-send-it-to--flows-for-the-places-files-go) |
+| 2 | [Trim and crop — the content Magpie cannot touch](#2-trim-and-crop--the-content-magpie-cannot-touch) |
+| | **Worth doing next** |
+| 3 | [Hardware acceleration beyond NVIDIA](#3-hardware-acceleration-beyond-nvidia) |
+| 4 | [A results ledger](#4-a-results-ledger) |
+| 5 | [A CLI, and Explorer's right-click menu](#5-a-cli-and-explorers-right-click-menu) |
+| 6 | [AV1 on the Shrink tab](#6-av1-on-the-shrink-tab) |
+| | **Small wins** |
+| 7 | [Thumbnails in the queues](#7-thumbnails-in-the-queues) |
+| 8 | [Subtitle burn-in](#8-subtitle-burn-in) |
+| 9 | [The queue survives a restart](#9-the-queue-survives-a-restart) |
+| 10 | [Clipboard watcher on Download](#10-clipboard-watcher-on-download) |
+| 11 | [Dedupe by content, not by URL](#11-dedupe-by-content-not-by-url) |
+| | [**Watching**](#watching) — other projects worth reading for ideas |
+| | [**Parked**](#parked) — considered, and not obviously worth it |
 
 ---
 
@@ -338,7 +335,8 @@ and its table of site names (`routing.py` already routes by host).
 
 1. Move the entry out of this file and into the README, where it is described
    as a thing Magpie does rather than a thing it might.
-2. Bump the version part the entry names, and reset the ones to its right.
+2. Put a line for it in the next release's notes - the version is the date
+   it ships, and `tools/release.py` works that out.
 3. Add a `tools/selftest.py` check if it folded in behaviour that could go
    missing again.
 4. Put the new file in the two lists that index it, if it added one: the
