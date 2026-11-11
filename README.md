@@ -23,7 +23,9 @@ left; if one fails, it says why — *"Video unavailable. This video is
 private"* — rather than pointing at the log. **Recent** brings back the last
 fifty links, a link you've just copied is offered when you switch to Magpie,
 and **Stop** takes its half-written files with it. Right-click any box for
-Cut, Copy and Paste.
+Cut, Copy and Paste. Pictures come from places that make it hard, too:
+paste the IMDb page a poster opens on and you get the poster itself, at
+full size.
 
 Convert, Resize and Shrink work on files from anywhere, not only on things
 Magpie downloaded. Drag them onto the window and they land on the page you
