@@ -303,7 +303,7 @@ High value, and each one contained enough to finish in a sitting or two.
   export: Get cookies.txt LOCALLY saves a site's cookies to Downloads and
   Magpie picks the file up as it comes to the front
   (*Exported cookies are picked up*).
-  It works - IMDb's pictures need it - but it is a click in the browser
+  It works - IMDb's images need it - but it is a click in the browser
   every time a session goes stale, and a sign-in passing through Downloads.
 
   **What to build.** A Magpie extension that Magpie asks for one site's

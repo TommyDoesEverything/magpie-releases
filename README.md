@@ -10,7 +10,7 @@ fifth that puts them in an order:
 | --- | --- |
 | **Download** | Paste links. Magpie works out where each one should go — yt-dlp for video and audio, gallery-dl for image galleries, instaloader for Instagram archives — and drives all three from one window |
 | **Convert** | Turn files you already have into another codec or container, including the ProRes and DNxHR mezzanines an editor wants, and fifteen audio formats |
-| **Resize** | Change the dimensions of video or pictures, or the sample rate of audio |
+| **Resize** | Change the dimensions of video or images, or the sample rate of audio |
 | **Shrink** | Fit a file inside a size limit — 10 MB for Discord, say — and sound or look as good as possible doing it |
 | **Flow** | Do several of those in a row: download these links, resize what comes back, then get it all under ten megabytes. Saved under a name and run again whenever |
 
@@ -25,9 +25,9 @@ fifty links, a link you've just copied is offered when you switch to Magpie,
 and **Stop** takes its half-written files with it. Right-click any box for
 Cut, Copy and Paste.
 
-**What to get** is Video, Audio only or Pictures, for any link: Pictures
+**What to get** is Video, Audio only or Images, for any link: Images
 takes a video's thumbnail without the video, a gallery's images without its
-videos, or a picture page's picture. They come from places that make it
+videos, or an image page's image. They come from places that make it
 hard, too: paste the IMDb page a poster opens on and you get the poster
 itself, at full size.
 
@@ -35,7 +35,7 @@ For anything behind a sign-in, export the site's cookies with the
 [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY)
 browser extension: Magpie notices the file in your Downloads folder when
 you switch back to it, offers to use it, and deletes it once it has the
-cookies. IMDb needs this too, for its pictures.
+cookies. IMDb needs this too, for its images.
 
 Convert, Resize and Shrink work on files from anywhere, not only on things
 Magpie downloaded. Drag them onto the window and they land on the page you
@@ -101,7 +101,7 @@ copy doesn't carry the download marker that triggers the warning.
 On first run Magpie offers to fetch `yt-dlp.exe`, and offers `ffmpeg` the
 first time something needs it (about 73 MB — it's what joins the best video to
 the best audio). Everything else it might want is offered the same way, when
-and only when something asks for it: `pngquant` for shrinking pictures, and a
+and only when something asks for it: `pngquant` for shrinking images, and a
 fuller `ffmpeg` build for one voice codec. Two of the fifteen audio formats
 need something extra, and Magpie says so in the panel rather than at the end
 of a batch.
