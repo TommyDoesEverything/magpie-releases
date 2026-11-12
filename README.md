@@ -23,9 +23,13 @@ left; if one fails, it says why — *"Video unavailable. This video is
 private"* — rather than pointing at the log. **Recent** brings back the last
 fifty links, a link you've just copied is offered when you switch to Magpie,
 and **Stop** takes its half-written files with it. Right-click any box for
-Cut, Copy and Paste. Pictures come from places that make it hard, too:
-paste the IMDb page a poster opens on and you get the poster itself, at
-full size.
+Cut, Copy and Paste.
+
+**What to get** is Video, Audio only or Pictures, for any link: Pictures
+takes a video's thumbnail without the video, a gallery's images without its
+videos, or a picture page's picture. They come from places that make it
+hard, too: paste the IMDb page a poster opens on and you get the poster
+itself, at full size.
 
 For anything behind a sign-in, export the site's cookies with the
 [Get cookies.txt LOCALLY](https://github.com/kairi003/Get-cookies.txt-LOCALLY)
